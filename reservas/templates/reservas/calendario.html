@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calendario de {{ resource.name }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: #111827;
+        }
+
+        .btn-nav {
+            padding: 8px 16px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .btn-nav:hover {
+            background: #1e40af;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: #2563eb;
+            color: white;
+            padding: 12px;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            border: 1px solid #e5e7eb;
+            height: 120px;
+            padding: 8px;
+            vertical-align: top;
+        }
+
+        .reserva {
+            background: #10b981;
+            color: white;
+            padding: 6px;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .reserva:hover {
+            background: #059669;
+        }
+
+        .sin-reserva {
+            color: #9ca3af;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Calendario de {{ resource.name }}</h1>
+        <div>
+            <a href="?week=prev"><button class="btn-nav">⟵ Semana Anterior</button></a>
+            <a href="?week=next"><button class="btn-nav">Semana Siguiente ⟶</button></a>
+        </div>
+    </div>
+    <p>{{ resource.description }}</p>
+
+    <table>
+        <thead>
+            <tr>
+                {% for dia in dias_semana %}
+                <th>{{ dia|date:"l d M" }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for dia in dias_semana %}
+                <td>
+                    {% with fecha=dia|date:"Y-m-d" %}
+                        {% if reservas_por_dia.fecha %}
+                            {% for reserva in reservas_por_dia.fecha %}
+                                <div class="reserva">
+                                    {{ reserva.start_time|date:"H:i" }} - {{ reserva.end_time|date:"H:i" }}<br>
+                                    ({{ reserva.user.username }})
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <span class="sin-reserva">Libre</span>
+                        {% endif %}
+                    {% endwith %}
+                </td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

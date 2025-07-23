@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestor de Reservas - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+    <!-- NAVBAR -->
+    <nav class="bg-blue-600 text-white p-4 flex justify-between">
+        <h1 class="text-xl font-bold">Gestor de Reservas</h1>
+        <div>
+            {% if user.is_authenticated %}
+                <span class="mr-4">Hola, {{ user.username }}</span>
+                <a href="{% url 'logout' %}" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">Cerrar Sesión</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="bg-green-500 px-3 py-1 rounded hover:bg-green-600">Iniciar Sesión</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- CONTENIDO -->
+    <div class="max-w-5xl mx-auto mt-8 px-4">
+        <h2 class="text-2xl font-bold text-center mb-6">Elige una pista para ver su calendario</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for resource in resources %}
+            <div class="bg-white rounded-lg shadow-md p-6 text-center transition-transform transform hover:scale-105 hover:shadow-lg">
+                <h3 class="text-lg font-semibold mb-2">{{ resource.name }}</h3>
+                <p class="text-gray-600 mb-4">{{ resource.description|default:"Pista disponible." }}</p>
+                <a href="{% url 'calendario_full' resource.id %}" 
+                   class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300">
+                    Ver Calendario
+                </a>
+            </div>
+            {% empty %}
+            <p class="col-span-full text-center text-gray-500">No hay pistas disponibles.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+</html>

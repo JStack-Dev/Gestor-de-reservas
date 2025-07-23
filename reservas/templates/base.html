@@ -1,0 +1,32 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Gestor de Reservas{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container">
+            <h2 class="logo">Gestor de Reservas</h2>
+            <div class="nav-links">
+                <a href="/">Inicio</a>
+                {% if user.is_authenticated %}
+                    <span>Hola, {{ user.username }}</span>
+                    <a href="/logout/">Cerrar sesión</a>
+                {% else %}
+                    <a href="/login/">Iniciar sesión</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
